@@ -71,7 +71,7 @@ function install_packages() {
 
 function install_skipper() {
     echo "Installing skipper and adding ~/.local/bin to PATH"
-    pip3 install strato-skipper==1.22.0 --user
+    pip3 install strato-skipper==1.26.0 --user
 
     #grep -qxF "export PATH=~/.local/bin:$PATH" ~/.bashrc || echo "export PATH=~/.local/bin:$PATH" >> ~/.bashrc
     #export PATH="$PATH:~/.local/bin"
@@ -86,17 +86,6 @@ function config_firewalld() {
     sudo dnf install -y firewalld
     sudo systemctl unmask --now firewalld
     sudo systemctl start firewalld
-    if [ "${EXTERNAL_PORT}" = "y" ]; then
-        echo "configuring external ports"
-        sudo firewall-cmd --zone=public --add-port=6000/tcp
-        sudo firewall-cmd --zone=public --add-port=6008/tcp
-    fi
-    echo "configuring libvirt zone ports ports"
-    sudo firewall-cmd --zone=libvirt --add-port=6000/tcp
-    sudo firewall-cmd --zone=libvirt --add-port=6008/tcp
-    # sudo firewall-cmd --reload
-    echo "Restarting libvirt after firewalld changes"
-    sudo systemctl restart libvirtd
 }
 
 function additional_configs() {
